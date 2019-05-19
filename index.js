@@ -11,21 +11,35 @@ import useFilecoinNetworkInfo from '@jimpick/use-filecoin-network-info'
 import useFilecoinAsks from '@jimpick/use-filecoin-asks'
 import InkWatchForExitKey from '@jimpick/ink-watch-for-exit-key'
 import ShowBundle from './showBundle'
+import Duration from './duration'
 import Scrollable from './scrollable'
 import Asks from './asks'
 
 const cli = meow(
   `
     Usage
-      $ filecoin-browse-asks [options]
+      $ filecoin-pickaxe-direct-deal [options]
+
+    Options:
+
+      --duration <blocks>
+      -d <blocks>
+
+        Deal duration in blocks (approx 30 seconds each)
   `,
   {
     flags: {
+      duration: {
+        alias: 'd',
+        type: 'string'
+      }
     }
   }
 )
 
 const args = cli.flags
+
+const duration = Number(args.duration) || 2880
 
 const Main = () => {
   const [nickname] = useFilecoinConfig('heartbeat.nickname')
@@ -37,7 +51,7 @@ const Main = () => {
   })
   const [unfilteredAsks] = useFilecoinAsks()
   const asks = unfilteredAsks &&
-    unfilteredAsks.filter(ask => ask.expiry > height)
+    unfilteredAsks.filter(ask => ask.expiry > height + duration)
 
   const { columns, rows } = process.stdout
 
@@ -58,7 +72,7 @@ const Main = () => {
   )
 
   const content = <Scrollable
-    height={rows - 4}
+    height={rows - 5}
     dataLength={asks && asks.length}
     render={
       ({ height, scrollTop, cursorIndex }) => {
@@ -84,6 +98,7 @@ const Main = () => {
           </Box>
         </Box>
         <ShowBundle />
+        <Duration duration={duration} height={height} />
         {content}
         <Box>
           <Box>
