@@ -5,12 +5,13 @@ import React, { useState, useEffect } from 'react'
 import { render, Box, Color } from 'ink'
 import { groupStart, groupStop } from './group'
 import { ConnectGroup } from './groupContext'
+import { SelectBundle } from './bundleContext'
 import useFilecoinConfig from '@jimpick/use-filecoin-config'
 import useFilecoinHead from '@jimpick/use-filecoin-head'
 import useFilecoinNetworkInfo from '@jimpick/use-filecoin-network-info'
 import useFilecoinAsks from '@jimpick/use-filecoin-asks'
 import InkWatchForExitKey from '@jimpick/ink-watch-for-exit-key'
-import ShowBundle from './showBundle'
+import Bundle from './bundle'
 import Duration from './duration'
 import Scrollable from './scrollable'
 import AsksAndRequests from './asksAndRequests'
@@ -88,31 +89,33 @@ const Main = () => {
 
   return (
     <ConnectGroup>
-      <Box flexDirection="column" width={columns} height={rows - 1}>
-        <Box>
-          <Box flexGrow={1}>
-            <Color green>Filecoin Pickaxe Direct Deal</Color>
-          </Box>
+      <SelectBundle>
+        <Box flexDirection="column" width={columns} height={rows - 1}>
           <Box>
-            {asks && `${asks.length} asks`}
+            <Box flexGrow={1}>
+              <Color green>Filecoin Pickaxe Direct Deal</Color>
+            </Box>
+            <Box>
+              {asks && `${asks.length} asks`}
+            </Box>
           </Box>
+          <Bundle />
+          <Duration duration={duration} height={height} />
+          {content}
+          <Box>
+            <Box>
+              {nickname && nickname + ' '}
+            </Box>
+            <Box flexGrow={1}>
+              {height} {seconds}
+            </Box>
+            <Box>
+              <Box>{netInfo}</Box>
+            </Box>
+          </Box>
+          <InkWatchForExitKey />
         </Box>
-        <ShowBundle />
-        <Duration duration={duration} height={height} />
-        {content}
-        <Box>
-          <Box>
-            {nickname && nickname + ' '}
-          </Box>
-          <Box flexGrow={1}>
-            {height} {seconds}
-          </Box>
-          <Box>
-            <Box>{netInfo}</Box>
-          </Box>
-        </Box>
-        <InkWatchForExitKey />
-      </Box>
+      </SelectBundle>
     </ConnectGroup>
   )
 }

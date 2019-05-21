@@ -1,29 +1,17 @@
 import path from 'path'
 import React, { useState, useEffect, useContext } from 'react'
-import { Box, Color } from 'ink'
-import prettyBytes from 'pretty-bytes'
 import GroupContext from './groupContext'
 
-function Bundle ({ bundleName, filenameBase, cid, size }) {
-  let cidAndSize
-  if (cid) {
-    cidAndSize = <Box>
-      <Color magenta>
-        {` ${prettyBytes(size)}`}
-      </Color>
-      {` ${cid}`}
-    </Box>
-  }
-  return (
-    <Box>
-      <Color cyan>{bundleName}:</Color>
-      <Color yellow>{` ${filenameBase}`}</Color>
-      {cidAndSize}
-    </Box>
-  )
-}
+const BundleContext = React.createContext()
 
-function SelectBundle ({ bundle, bundleImports }) {
+function SelectBundleWithImports ({ children, bundle, bundleImports }) {
+  if (!bundle || !bundleImports) {
+    return (
+      <BundleContext.Provider value={{ loading: true }}>
+        {children}
+      </BundleContext.Provider>
+    )
+  }
   const { name, sources } = JSON.parse(bundle)
   const { base } = path.parse(sources[0].file)
   const biv = bundleImports.shared.value()
@@ -39,16 +27,20 @@ function SelectBundle ({ bundle, bundleImports }) {
       size = importRecord.sources[0].stats.size
     }
   }
+  const value = {
+    bundleName: name,
+    filenameBase: base,
+    cid,
+    size
+  }
   return (
-    <Bundle
-      bundleName={name}
-      filenameBase={base}
-      cid={cid}
-      size={size} />
+    <BundleContext.Provider value={value}>
+      {children}
+    </BundleContext.Provider>
   )
 }
 
-export default function ShowBundle () {
+export function SelectBundle ({ children }) {
   const group = useContext(GroupContext)
   const [bundle, setBundle] = useState()
   const [bundleImports, setBundleImports] = useState()
@@ -69,12 +61,12 @@ export default function ShowBundle () {
     return () => { umounted = true }
   }, [group])
 
-  if (!bundle || !bundleImports) return <Box>Loading...</Box>
-
   return (
-    <SelectBundle
-      bundle={bundle}
-      bundleImports={bundleImports} />
+    <SelectBundleWithImports bundle={bundle} bundleImports={bundleImports}>
+      {children}
+    </SelectBundleWithImports>
   )
 }
+
+export default BundleContext
 
