@@ -1,14 +1,33 @@
 import path from 'path'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Box, Color } from 'ink'
 import prettyBytes from 'pretty-bytes'
 import GroupContext from './groupContext'
 
-function Bundle ({ bundle, bundleImports }) {
+function Bundle ({ bundleName, filenameBase, cid, size }) {
+  let cidAndSize
+  if (cid) {
+    cidAndSize = <Box>
+      <Color magenta>
+        {` ${prettyBytes(size)}`}
+      </Color>
+      {` ${cid}`}
+    </Box>
+  }
+  return (
+    <Box>
+      <Color cyan>{bundleName}:</Color>
+      <Color yellow>{` ${filenameBase}`}</Color>
+      {cidAndSize}
+    </Box>
+  )
+}
+
+function SelectBundle ({ bundle, bundleImports }) {
   const { name, sources } = JSON.parse(bundle)
   const { base } = path.parse(sources[0].file)
   const biv = bundleImports.shared.value()
-  let cid
+  let cid, size
   if (biv[name]) {
     const times = Object.keys(biv[name])
       .map(time => Number(time))
@@ -16,24 +35,21 @@ function Bundle ({ bundle, bundleImports }) {
     const last = biv[name][times[times.length - 1]]
     if (last) {
       const importRecord = JSON.parse([...last][0])
-      cid = <Box>
-        <Color magenta>
-          {` ${prettyBytes(importRecord.sources[0].stats.size)}`}
-        </Color>
-        {` ${importRecord.sources[0].single}`}
-      </Box>
+      cid = importRecord.sources[0].single
+      size = importRecord.sources[0].stats.size
     }
   }
   return (
-    <Box>
-      <Color cyan>{name}:</Color>
-      <Color yellow>{' ' + base}</Color>
-      {cid}
-    </Box>
+    <Bundle
+      bundleName={name}
+      filenameBase={base}
+      cid={cid}
+      size={size} />
   )
 }
 
-function BundleWithImports ({ group }) {
+export default function ShowBundle () {
+  const group = useContext(GroupContext)
   const [bundle, setBundle] = useState()
   const [bundleImports, setBundleImports] = useState()
 
@@ -56,25 +72,9 @@ function BundleWithImports ({ group }) {
   if (!bundle || !bundleImports) return <Box>Loading...</Box>
 
   return (
-    <Bundle
+    <SelectBundle
       bundle={bundle}
       bundleImports={bundleImports} />
-  )
-}
-
-export default function ShowBundle () {
-  return (
-    <GroupContext.Consumer>
-      {
-        group => {
-          if (!group) {
-            return <Box>Loading...</Box>
-          } else {
-            return <BundleWithImports group={group} />
-          }
-        }
-      }
-    </GroupContext.Consumer>
   )
 }
 
