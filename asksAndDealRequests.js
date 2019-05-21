@@ -3,11 +3,12 @@ import { Box, Color } from 'ink'
 import figures from 'figures'
 import BigNumber from 'bignumber.js'
 
-export default function AsksAndRequests ({
+export default function AsksAndDealRequests ({
   height,
   scrollTop,
   cursorIndex,
-  asks
+  asks,
+  minerDealRequests
 }) {
   const sortedAsks = useMemo(
     () => (asks && asks.sort((a, b) => BigNumber(a.price).comparedTo(b.price))),
@@ -19,6 +20,11 @@ export default function AsksAndRequests ({
       if (i >= scrollTop && i < scrollTop + height) {
         const ask = sortedAsks[i]
         const pointer = (i === cursorIndex) ? figures.pointer : ' '
+        let dealRequestInfo
+        const minerDealRequestKey = `${ask.miner}_${ask.id}`
+        if (minerDealRequests[minerDealRequestKey]) {
+          dealRequestInfo = minerDealRequests[minerDealRequestKey]
+        }
         rows.push(
           <Box textWrap="truncate" key={i}>
             {pointer}{' '}
@@ -26,7 +32,8 @@ export default function AsksAndRequests ({
             <Color blue>{ask.miner}</Color>{' '}
             <Color blue>{`${ask.id}`.padEnd(2)}</Color>{' '}
             <Color yellow>{`${ask.price}`.padEnd(22)}</Color>{' '}
-            <Color gray>{ask.expiry}</Color>
+            <Color gray>{`${ask.expiry}`.padEnd(10)}</Color>
+            {dealRequestInfo}
           </Box>
         )
       }

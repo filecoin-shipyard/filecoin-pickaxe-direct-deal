@@ -39,6 +39,18 @@ class Group {
   async bundleImports () {
     return await this.collaboration.sub('bundleImports', 'ormap')
   }
+
+  async dealRequests () {
+    return await this.collaboration.sub('dealRequests', 'ormap')
+  }
+
+  async minerRequests () {
+    return await this.collaboration.sub('minerDealRequests', 'ormap')
+  }
+
+  async cidRequests () {
+    return await this.collaboration.sub('cidDealRequests', 'ormap')
+  }
 }
 
 let group

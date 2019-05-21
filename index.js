@@ -14,7 +14,7 @@ import InkWatchForExitKey from '@jimpick/ink-watch-for-exit-key'
 import Bundle from './bundle'
 import Duration from './duration'
 import Scrollable from './scrollable'
-import AsksAndRequests from './asksAndRequests'
+import AsksAndDealRequests from './asksAndDealRequests'
 
 const cli = meow(
   `
@@ -54,6 +54,11 @@ const Main = () => {
   const asks = unfilteredAsks &&
     unfilteredAsks.filter(ask => ask.expiry > height + duration)
 
+  const minerDealRequests = {
+    t2s6iazu7pgvwzhzcrnf7uoikj4sj7nqetzqbgziq_0: 'Jim1',
+    t2e2cnahtdtb44fohxllme5rtbxyep4y6inphmhfq_0: 'Jim2'
+  }
+
   const { columns, rows } = process.stdout
 
   if (!updateTime) {
@@ -78,8 +83,9 @@ const Main = () => {
     render={
       ({ height, scrollTop, cursorIndex }) => {
         return (
-          <AsksAndRequests
+          <AsksAndDealRequests
             asks={asks}
+            minerDealRequests={minerDealRequests}
             height={height}
             scrollTop={scrollTop}
             cursorIndex={cursorIndex} />
