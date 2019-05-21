@@ -3,7 +3,7 @@ import { Box, Color } from 'ink'
 import figures from 'figures'
 import BigNumber from 'bignumber.js'
 
-export default function Asks ({
+export default function AsksAndRequests ({
   height,
   scrollTop,
   cursorIndex,

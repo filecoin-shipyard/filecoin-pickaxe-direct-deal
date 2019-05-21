@@ -13,7 +13,7 @@ import InkWatchForExitKey from '@jimpick/ink-watch-for-exit-key'
 import ShowBundle from './showBundle'
 import Duration from './duration'
 import Scrollable from './scrollable'
-import Asks from './asks'
+import AsksAndRequests from './asksAndRequests'
 
 const cli = meow(
   `
@@ -77,7 +77,7 @@ const Main = () => {
     render={
       ({ height, scrollTop, cursorIndex }) => {
         return (
-          <Asks
+          <AsksAndRequests
             asks={asks}
             height={height}
             scrollTop={scrollTop}

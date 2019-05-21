@@ -1,6 +1,7 @@
 import path from 'path'
 import React, { useState, useEffect } from 'react'
 import { Box, Color } from 'ink'
+import prettyBytes from 'pretty-bytes'
 import GroupContext from './groupContext'
 
 function Bundle ({ bundle, bundleImports }) {
@@ -16,8 +17,10 @@ function Bundle ({ bundle, bundleImports }) {
     if (last) {
       const importRecord = JSON.parse([...last][0])
       cid = <Box>
-        {' '}
-        {`${importRecord.sources[0].single}`}
+        <Color magenta>
+          {` ${prettyBytes(importRecord.sources[0].stats.size)}`}
+        </Color>
+        {` ${importRecord.sources[0].single}`}
       </Box>
     }
   }
