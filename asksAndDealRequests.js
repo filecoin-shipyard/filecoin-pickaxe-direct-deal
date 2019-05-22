@@ -1,16 +1,17 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { Box, Color } from 'ink'
 import figures from 'figures'
 import BigNumber from 'bignumber.js'
 import ProposeDealKey from './proposeDealKey'
+import DealRequestsContext from './dealRequestsContext'
 
 export default function AsksAndDealRequests ({
   height,
   scrollTop,
   cursorIndex,
-  asks,
-  minerDealRequests
+  asks
 }) {
+  const { values: dealRequests } = useContext(DealRequestsContext)
   const sortedAsks = useMemo(
     () => (asks && asks.sort((a, b) => BigNumber(a.price).comparedTo(b.price))),
     [asks]
@@ -23,8 +24,12 @@ export default function AsksAndDealRequests ({
         const pointer = (i === cursorIndex) ? figures.pointer : ' '
         let dealRequestInfo
         const minerDealRequestKey = `${ask.miner}_${ask.id}`
-        if (minerDealRequests[minerDealRequestKey]) {
-          dealRequestInfo = minerDealRequests[minerDealRequestKey]
+        if (dealRequests && dealRequests[minerDealRequestKey]) {
+          /*
+          console.log('Jim dealRequests', dealRequests)
+          process.exit()
+          */
+          dealRequestInfo = 'Requested'
         }
         rows.push(
           <Box textWrap="truncate" key={i}>

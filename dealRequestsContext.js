@@ -27,16 +27,16 @@ export function WatchDealRequests ({ children }) {
           Object.keys(values).forEach(key => {
             draft.dealRequests[key] = JSON.parse([...values[key].dealRequest][0])
           })
-          /*
-          if (Object.keys(draft.dealRequests).length > 0) {
-            console.log('Jim loaded', draft.dealRequests)
-            process.exit()
-          }
-          */
         })
+        /*
+        if (Object.keys(nextState).length > 0) {
+          console.log('Jim loaded', nextState)
+          process.exit()
+        }
+        */
         setDealRequests({
           shared,
-          values: nextState
+          values: nextState.dealRequests
         })
       }
     }

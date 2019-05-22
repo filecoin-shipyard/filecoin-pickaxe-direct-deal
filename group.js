@@ -58,6 +58,7 @@ let group
 export async function groupStart () {
   group = new Group()
   await group.start()
+  return group
 }
 
 export function getGroup () {

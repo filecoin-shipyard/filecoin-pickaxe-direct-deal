@@ -55,11 +55,6 @@ const Main = () => {
   const asks = unfilteredAsks &&
     unfilteredAsks.filter(ask => ask.expiry > height + duration)
 
-  const minerDealRequests = {
-    t2s6iazu7pgvwzhzcrnf7uoikj4sj7nqetzqbgziq_0: 'Jim1',
-    t2e2cnahtdtb44fohxllme5rtbxyep4y6inphmhfq_0: 'Jim2'
-  }
-
   const { columns, rows } = process.stdout
 
   if (!updateTime) {
@@ -88,7 +83,6 @@ const Main = () => {
             return (
               <AsksAndDealRequests
                 asks={asks}
-                minerDealRequests={minerDealRequests}
                 height={height}
                 scrollTop={scrollTop}
                 cursorIndex={cursorIndex} />
