@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Box, Color } from 'ink'
 import figures from 'figures'
 import BigNumber from 'bignumber.js'
+import ProposeDealKey from './proposeDealKey'
 
 export default function AsksAndDealRequests ({
   height,
@@ -39,6 +40,13 @@ export default function AsksAndDealRequests ({
       }
     }
   }
-  return <>{rows}</>
+  return (
+    <>
+      <ProposeDealKey
+        key="keyboard"
+        ask={sortedAsks[cursorIndex]} />
+      {rows}
+    </>
+  )
 }
 

@@ -6,6 +6,7 @@ import { render, Box, Color } from 'ink'
 import { groupStart, groupStop } from './group'
 import { ConnectGroup } from './groupContext'
 import { SelectBundle } from './bundleContext'
+import { WatchDealRequests } from './dealRequestsContext'
 import useFilecoinConfig from '@jimpick/use-filecoin-config'
 import useFilecoinHead from '@jimpick/use-filecoin-head'
 import useFilecoinNetworkInfo from '@jimpick/use-filecoin-network-info'
@@ -15,7 +16,6 @@ import Bundle from './bundle'
 import Duration from './duration'
 import Scrollable from './scrollable'
 import AsksAndDealRequests from './asksAndDealRequests'
-import ProposeDealKey from './proposeDealKey'
 
 const cli = meow(
   `
@@ -78,21 +78,25 @@ const Main = () => {
     </Box>
   )
 
-  const content = <Scrollable
-    height={rows - 5}
-    dataLength={asks && asks.length}
-    render={
-      ({ height, scrollTop, cursorIndex }) => {
-        return (
-          <AsksAndDealRequests
-            asks={asks}
-            minerDealRequests={minerDealRequests}
-            height={height}
-            scrollTop={scrollTop}
-            cursorIndex={cursorIndex} />
-        )
-      }
-    } />
+  const content = (
+    <WatchDealRequests>
+      <Scrollable
+        height={rows - 5}
+        dataLength={asks && asks.length}
+        render={
+          ({ height, scrollTop, cursorIndex }) => {
+            return (
+              <AsksAndDealRequests
+                asks={asks}
+                minerDealRequests={minerDealRequests}
+                height={height}
+                scrollTop={scrollTop}
+                cursorIndex={cursorIndex} />
+            )
+          }
+        } />
+    </WatchDealRequests>
+  )
 
   return (
     <ConnectGroup>
@@ -120,7 +124,6 @@ const Main = () => {
               <Box>{netInfo}</Box>
             </Box>
           </Box>
-          <ProposeDealKey />
           <InkWatchForExitKey />
         </Box>
       </SelectBundle>

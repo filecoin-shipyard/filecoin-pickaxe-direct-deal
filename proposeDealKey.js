@@ -1,38 +1,37 @@
 import React, { useEffect, useContext } from 'react'
-import { Box, AppContext, StdinContext } from 'ink'
+import { Box, StdinContext } from 'ink'
 import BundleContext from './bundleContext'
+import DealRequestsContext from './dealRequestsContext'
 
-function ProposeDealKey ({ stdin, setRawMode, exit }) {
+export default function ProposeDealKey ({ ask }) {
+  const { stdin, setRawMode } = useContext(StdinContext)
   const { loading, cid } = useContext(BundleContext)
+  const dealRequests = useContext(DealRequestsContext)
 
   useEffect(() => {
+    if (!dealRequests) return
+    const { shared } = dealRequests
     setRawMode(true)
-    stdin.on('data', handleData)
-    return () => { stdin.removeListener('data', handleData) }
+    stdin.on('data', handleKey)
+    return () => { stdin.removeListener('data', handleKey) }
     
-    function handleData (data) {
+    function handleKey (data) {
       if (data === 'p' && !loading) {
-        console.log('Proposed deal', cid)
+        // console.log('Proposed deal', cid, ask)
+        const record = {
+          timestamp: Date.now(),
+          cid,
+          ask
+        }
+        const minerKey = `${ask.miner}_${ask.id}`
+        shared.applySub(
+          minerKey, 'ormap', 'applySub',
+          `dealRequest`, 'mvreg', 'write',
+          JSON.stringify(record)
+        )
       }
     }
-  }, [loading, cid])
+  }, [ask, loading, cid, dealRequests])
 
   return null
-}
-
-export default function ProposeDealKeyWithStdin () {
-  return (
-    <AppContext.Consumer>
-      {({ exit }) => (
-        <StdinContext.Consumer>
-          {({stdin, setRawMode}) => (
-            <ProposeDealKey
-              stdin={stdin}
-              setRawMode={setRawMode}
-              exit={exit}/>
-          )}
-        </StdinContext.Consumer>
-      )}
-    </AppContext.Consumer>
-  )
 }
