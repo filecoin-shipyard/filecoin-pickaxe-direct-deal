@@ -3,6 +3,7 @@ import { Box, Color } from 'ink'
 import figures from 'figures'
 import BigNumber from 'bignumber.js'
 import ProposeDealKey from './proposeDealKey'
+import BundleContext from './bundleContext'
 import DealRequestsContext from './dealRequestsContext'
 
 export default function AsksAndDealRequests ({
@@ -11,6 +12,7 @@ export default function AsksAndDealRequests ({
   cursorIndex,
   asks
 }) {
+  const { loading, cid } = useContext(BundleContext)
   const { values: dealRequests } = useContext(DealRequestsContext)
   const sortedAsks = useMemo(
     () => (asks && asks.sort((a, b) => BigNumber(a.price).comparedTo(b.price))),
@@ -25,11 +27,11 @@ export default function AsksAndDealRequests ({
         let dealRequestInfo
         const minerDealRequestKey = `${ask.miner}_${ask.id}`
         if (dealRequests && dealRequests[minerDealRequestKey]) {
-          /*
-          console.log('Jim dealRequests', dealRequests)
-          process.exit()
-          */
-          dealRequestInfo = 'Requested'
+          const request = dealRequests[minerDealRequestKey]
+          // console.log('Jim dealRequest', request)
+          if (request.cid === cid) {
+            dealRequestInfo = 'Requested: ' + request.timestamp
+          }
         }
         rows.push(
           <Box textWrap="truncate" key={i}>
