@@ -15,6 +15,7 @@ import Bundle from './bundle'
 import Duration from './duration'
 import Scrollable from './scrollable'
 import AsksAndDealRequests from './asksAndDealRequests'
+import ProposeDealKey from './proposeDealKey'
 
 const cli = meow(
   `
@@ -119,6 +120,7 @@ const Main = () => {
               <Box>{netInfo}</Box>
             </Box>
           </Box>
+          <ProposeDealKey />
           <InkWatchForExitKey />
         </Box>
       </SelectBundle>
