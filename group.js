@@ -44,11 +44,11 @@ class Group {
     return await this.collaboration.sub('dealRequests', 'ormap')
   }
 
-  async minerRequests () {
+  async minerDealRequests () {
     return await this.collaboration.sub('minerDealRequests', 'ormap')
   }
 
-  async cidRequests () {
+  async cidDealRequests () {
     return await this.collaboration.sub('cidDealRequests', 'ormap')
   }
 }

@@ -13,7 +13,10 @@ export default function AsksAndDealRequests ({
   asks
 }) {
   const { loading, cid } = useContext(BundleContext)
-  const { values: dealRequests } = useContext(DealRequestsContext)
+  const {
+    dealRequests: { values: dealRequests },
+    minerDealRequests: { values: minerDealRequests }
+  } = useContext(DealRequestsContext)
   const sortedAsks = useMemo(
     () => (asks && asks.sort((a, b) => BigNumber(a.price).comparedTo(b.price))),
     [asks]
@@ -26,11 +29,11 @@ export default function AsksAndDealRequests ({
         const pointer = (i === cursorIndex) ? figures.pointer : ' '
         let dealRequestInfo
         const minerDealRequestKey = `${ask.miner}_${ask.id}`
-        if (dealRequests && dealRequests[minerDealRequestKey]) {
-          const request = dealRequests[minerDealRequestKey]
-          // console.log('Jim dealRequest', request)
-          if (request.cid === cid) {
-            dealRequestInfo = 'Requested: ' + request.timestamp
+        if (minerDealRequests && minerDealRequests[minerDealRequestKey]) {
+          const dealRequestId = minerDealRequests[minerDealRequestKey]
+          if (dealRequests && dealRequests[dealRequestId]) {
+            const dealRequest = dealRequests[dealRequestId]
+            dealRequestInfo = 'Requested, ' + dealRequest.dealRequest.timestamp
           }
         }
         rows.push(
