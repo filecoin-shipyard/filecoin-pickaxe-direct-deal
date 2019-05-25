@@ -10,7 +10,8 @@ export default function AsksAndDealRequests ({
   height,
   scrollTop,
   cursorIndex,
-  asks
+  asks,
+  duration
 }) {
   const { loading, cid } = useContext(BundleContext)
   const {
@@ -34,6 +35,9 @@ export default function AsksAndDealRequests ({
           if (dealRequests && dealRequests[dealRequestId]) {
             const dealRequest = dealRequests[dealRequestId]
             dealRequestInfo = 'Requested, ' + dealRequest.dealRequest.timestamp
+            if (dealRequest.agentState) {
+              dealRequestInfo += `, ${dealRequest.agentState.state}`
+            }
           }
         }
         rows.push(
@@ -54,7 +58,8 @@ export default function AsksAndDealRequests ({
     <>
       <ProposeDealKey
         key="keyboard"
-        ask={sortedAsks[cursorIndex]} />
+        ask={sortedAsks[cursorIndex]}
+        duration={duration} />
       {rows}
     </>
   )

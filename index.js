@@ -85,7 +85,8 @@ const Main = () => {
                 asks={asks}
                 height={height}
                 scrollTop={scrollTop}
-                cursorIndex={cursorIndex} />
+                cursorIndex={cursorIndex}
+                duration={duration} />
             )
           }
         } />

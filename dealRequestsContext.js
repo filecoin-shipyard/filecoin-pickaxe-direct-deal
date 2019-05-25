@@ -24,21 +24,20 @@ export function WatchDealRequests ({ children }) {
           return
         }
         const nextState = produce(dealRequests, draft => {
-          draft.dealRequests = {}
-          const values = shared.value()
-          /*
-          console.log('Jim dealRequests', values)
+          const rawDealRequests = shared.value()
+          console.log('Jim dealRequests', rawDealRequests)
           process.exit()
-          */
-          Object.keys(values).forEach(key => {
-            const props = values[key]
-            draft.dealRequests[key] = {}
-            Object.keys(props).forEach(propName => {
-              draft.dealRequests[key][propName] = JSON.parse(
-                [...props[propName]][0]
-              )
-            })
-          })
+          const formattedDealRequests = {}
+          for (const dealRequestId in rawDealRequests) {
+            const rawDealRequest = rawDealRequests[dealRequestId]
+            const formatted = {}
+            for (const propKey in rawDealRequest) {
+              const propValue = rawDealRequest[propKey]
+              formatted[propKey] = JSON.parse([...propValue][0])
+            }
+            formattedDealRequests[dealRequestId] = formatted
+          }
+          draft.dealRequests = formattedDealRequests
         })
         /*
         console.log('Jim dealRequests', nextState.dealRequests)

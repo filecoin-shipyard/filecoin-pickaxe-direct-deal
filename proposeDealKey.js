@@ -7,13 +7,13 @@ import DealRequestsContext from './dealRequestsContext'
 
 const randomBytes = promisify(crypto.randomBytes)
 
-export default function ProposeDealKey ({ ask }) {
+export default function ProposeDealKey ({ ask, duration }) {
   const { stdin, setRawMode } = useContext(StdinContext)
   const { loading, cid } = useContext(BundleContext)
   const { dealRequests, minerDealRequests } = useContext(DealRequestsContext)
 
   useEffect(() => {
-    if (!dealRequests) return
+    if (!dealRequests || !duration) return
     setRawMode(true)
     stdin.on('data', handleKey)
     return () => { stdin.removeListener('data', handleKey) }
@@ -24,7 +24,8 @@ export default function ProposeDealKey ({ ask }) {
         const record = {
           timestamp: Date.now(),
           cid,
-          ask
+          ask,
+          duration
         }
         const minerAskId = `${ask.miner}_${ask.id}`
         const dealId = minerAskId + '_' + (await randomBytes(8)).toString('hex')
@@ -36,7 +37,7 @@ export default function ProposeDealKey ({ ask }) {
         minerDealRequests.shared.applySub(minerAskId, 'mvreg', 'write', dealId)
       }
     }
-  }, [ask, loading, cid, dealRequests])
+  }, [ask, loading, cid, dealRequests, duration])
 
   return null
 }
