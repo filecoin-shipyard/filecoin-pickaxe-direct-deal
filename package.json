@@ -14,7 +14,7 @@
   "author": "Jim Pick (@jimpick)",
   "license": "MIT",
   "dependencies": {
-    "@jimpick/filecoin-pickaxe-mineshaft": "^0.0.4",
+    "@jimpick/filecoin-pickaxe-mineshaft": "^0.0.5",
     "@jimpick/filecoin-pickaxe-mineshaft-context": "^0.0.1",
     "@jimpick/ink-watch-for-exit-key": "^0.0.4",
     "@jimpick/use-filecoin-asks": "^0.0.3",
