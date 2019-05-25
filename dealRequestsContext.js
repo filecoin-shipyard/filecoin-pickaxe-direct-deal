@@ -1,21 +1,21 @@
 import path from 'path'
 import React, { useState, useEffect, useContext } from 'react'
 import produce from 'immer'
-import GroupContext from './groupContext'
+import MineshaftContext from '@jimpick/filecoin-pickaxe-mineshaft-context'
 
 const DealRequestsContext = React.createContext()
 
 export function WatchDealRequests ({ children }) {
-  const group = useContext(GroupContext)
+  const mineshaft = useContext(MineshaftContext)
   const [dealRequests, setDealRequests] = useState({})
   const [minerDealRequests, setMinerDealRequests] = useState({})
 
   useEffect(() => {
-    if (!group) return
+    if (!mineshaft) return
     let unmounted = false
 
     async function runDealRequests () {
-      const { shared } = await group.dealRequests()
+      const { shared } = await mineshaft.dealRequests()
       loadDealRequests()
       shared.on('state changed', loadDealRequests)
       function loadDealRequests () {
@@ -53,7 +53,7 @@ export function WatchDealRequests ({ children }) {
     runDealRequests()
 
     async function runMinerDealRequests () {
-      const { shared } = await group.minerDealRequests()
+      const { shared } = await mineshaft.minerDealRequests()
       loadMinerDealRequests()
       shared.on('state changed', loadMinerDealRequests)
       function loadMinerDealRequests () {
@@ -84,7 +84,7 @@ export function WatchDealRequests ({ children }) {
     runMinerDealRequests()
 
     return () => { umounted = true }
-  }, [group])
+  }, [mineshaft])
 
   const value = {
     dealRequests,

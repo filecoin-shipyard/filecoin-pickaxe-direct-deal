@@ -3,8 +3,8 @@
 import meow from 'meow'
 import React, { useState, useEffect } from 'react'
 import { render, Box, Color } from 'ink'
-import { groupStart, groupStop } from './group'
-import { ConnectGroup } from './groupContext'
+import { mineshaftStart, mineshaftStop } from '@jimpick/filecoin-pickaxe-mineshaft'
+import { ConnectMineshaft } from '@jimpick/filecoin-pickaxe-mineshaft-context'
 import { SelectBundle } from './bundleContext'
 import { WatchDealRequests } from './dealRequestsContext'
 import useFilecoinConfig from '@jimpick/use-filecoin-config'
@@ -93,7 +93,7 @@ const Main = () => {
   )
 
   return (
-    <ConnectGroup>
+    <ConnectMineshaft>
       <SelectBundle>
         <Box flexDirection="column" width={columns} height={rows - 1}>
           <Box>
@@ -121,12 +121,12 @@ const Main = () => {
           <InkWatchForExitKey />
         </Box>
       </SelectBundle>
-    </ConnectGroup>
+    </ConnectMineshaft>
   )
 }
 
 async function run () {
-  await groupStart()
+  await mineshaftStart('filecoin-pickaxe')
 
   const { rerender, waitUntilExit } = render(<Main/>)
 

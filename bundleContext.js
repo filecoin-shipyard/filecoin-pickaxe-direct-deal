@@ -1,6 +1,6 @@
 import path from 'path'
 import React, { useState, useEffect, useContext } from 'react'
-import GroupContext from './groupContext'
+import MineshaftContext from '@jimpick/filecoin-pickaxe-mineshaft-context'
 
 const BundleContext = React.createContext()
 
@@ -41,25 +41,25 @@ function SelectBundleWithImports ({ children, bundle, bundleImports }) {
 }
 
 export function SelectBundle ({ children }) {
-  const group = useContext(GroupContext)
+  const mineshaft = useContext(MineshaftContext)
   const [bundle, setBundle] = useState()
   const [bundleImports, setBundleImports] = useState()
 
   useEffect(() => {
-    if (!group) return
+    if (!mineshaft) return
     let unmounted = false
-    const bundles = group.collaboration.shared.value()
+    const bundles = mineshaft.collaboration.shared.value()
     if (bundles.length === 0) return
     setBundle(bundles[bundles.length - 1])
     async function run () {
-      const loaded = await group.bundleImports()
+      const loaded = await mineshaft.bundleImports()
       if (!unmounted) {
         setBundleImports(loaded)
       }
     }
     run()
     return () => { umounted = true }
-  }, [group])
+  }, [mineshaft])
 
   return (
     <SelectBundleWithImports bundle={bundle} bundleImports={bundleImports}>
