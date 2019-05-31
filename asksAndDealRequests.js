@@ -34,9 +34,11 @@ export default function AsksAndDealRequests ({
           const dealRequestId = minerDealRequests[minerDealRequestKey]
           if (dealRequests && dealRequests[dealRequestId]) {
             const dealRequest = dealRequests[dealRequestId]
-            dealRequestInfo = 'Requested, ' + dealRequest.dealRequest.timestamp
-            if (dealRequest.agentState) {
-              dealRequestInfo += `, ${dealRequest.agentState.state}`
+            if (dealRequest.dealRequest.cid === cid) {
+              dealRequestInfo = 'Requested, ' + dealRequest.dealRequest.timestamp
+              if (dealRequest.agentState) {
+                dealRequestInfo += `, ${dealRequest.agentState.state}`
+              }
             }
           }
         }

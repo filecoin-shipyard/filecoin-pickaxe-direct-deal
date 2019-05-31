@@ -25,8 +25,10 @@ export function WatchDealRequests ({ children }) {
         }
         const nextState = produce(dealRequests, draft => {
           const rawDealRequests = shared.value()
+          /*
           console.log('Jim dealRequests', rawDealRequests)
           process.exit()
+          */
           const formattedDealRequests = {}
           for (const dealRequestId in rawDealRequests) {
             const rawDealRequest = rawDealRequests[dealRequestId]
