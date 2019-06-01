@@ -2,6 +2,7 @@ import React, { useMemo, useContext } from 'react'
 import { Box, Color } from 'ink'
 import figures from 'figures'
 import BigNumber from 'bignumber.js'
+import prettyMs from 'pretty-ms'
 import ProposeDealKey from './proposeDealKey'
 import BundleContext from './bundleContext'
 import DealRequestsContext from './dealRequestsContext'
@@ -23,6 +24,7 @@ export default function AsksAndDealRequests ({
     [asks]
   )
   const rows = []
+  const now = Date.now()
   if (asks) {
     for (let i = 0; i < sortedAsks.length; i++) {
       if (i >= scrollTop && i < scrollTop + height) {
@@ -35,9 +37,28 @@ export default function AsksAndDealRequests ({
           if (dealRequests && dealRequests[dealRequestId]) {
             const dealRequest = dealRequests[dealRequestId]
             if (dealRequest.dealRequest.cid === cid) {
-              dealRequestInfo = 'Requested, ' + dealRequest.dealRequest.timestamp
-              if (dealRequest.agentState) {
-                dealRequestInfo += `, ${dealRequest.agentState.state}`
+              const { agentState, errorMsg, deal } = dealRequest
+              if (agentState) {
+                const { state } = agentState
+                if (state === 'dealFailed' && errorMsg) {
+                  dealRequestInfo = <Color red>{errorMsg.errorMsg}</Color>
+                } else if (state === 'dealSuccess' && deal) {
+                  dealRequestInfo = <Color green>Deal: {deal.dealId}</Color>
+                } else if (state === 'queued') {
+                  dealRequestInfo = <Color grey>Queued</Color>
+                } else if (state === 'ack') {
+                  dealRequestInfo = <Color grey>Acknowledged</Color>
+                } else if (state === 'proposing') {
+                  dealRequestInfo = <Color yellow>Proposing...</Color>
+                } else {
+                  dealRequestInfo = state
+                }
+              } else {
+                dealRequestInfo = 'Requested'
+                const elapsed = now - dealRequest.dealRequest.timestamp
+                if (elapsed > 10000) {
+                  dealRequestInfo += ` ${prettyMs(elapsed)} ago`
+                }
               }
             }
           }
