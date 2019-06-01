@@ -1,6 +1,6 @@
 {
   "name": "filecoin-pickaxe-direct-deal",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Quickly make Filecoin deals for pickaxe bundles",
   "scripts": {
     "dev": "nodemon --ignore dist --exec babel-node index.js",
@@ -8,7 +8,7 @@
     "prepublish": "npm run build"
   },
   "bin": {
-    "filecoin-browse-asks": "dist/index.js"
+    "pickaxe-direct-deal": "dist/index.js"
   },
   "keywords": [],
   "author": "Jim Pick (@jimpick)",
