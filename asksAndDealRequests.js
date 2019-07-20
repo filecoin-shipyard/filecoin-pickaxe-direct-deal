@@ -20,7 +20,15 @@ export default function AsksAndDealRequests ({
     minerDealRequests: { values: minerDealRequests }
   } = useContext(DealRequestsContext)
   const sortedAsks = useMemo(
-    () => (asks && asks.sort((a, b) => BigNumber(a.price).comparedTo(b.price))),
+    () => (asks && asks.sort((a, b) => {
+      const price = BigNumber(a.price).comparedTo(b.price)
+      if (price !== 0) return price
+      const expiry = - (a.expiry - b.expiry)
+      if (expiry !== 0) return expiry
+      const miner = a.miner.localeCompare(b.miner)
+      if (miner !== 0) return miner
+      return a.id - b.id
+    })),
     [asks]
   )
   const rows = []
