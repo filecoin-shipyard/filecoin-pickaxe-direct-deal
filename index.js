@@ -44,11 +44,11 @@ const args = cli.flags
 const duration = Number(args.duration) || 2880
 
 const Main = () => {
-  const [nickname] = useFilecoinConfig('heartbeat.nickname')
-  const [, height, updateTime] = useFilecoinHead({
+  const [, nickname] = useFilecoinConfig('heartbeat.nickname')
+  const [, , height, updateTime] = useFilecoinHead({
     interval: 5000
   })
-  const [netName, , netHeight] = useFilecoinNetworkInfo({
+  const [, netName, , netHeight] = useFilecoinNetworkInfo({
     interval: 30000
   })
   const [unfilteredAsks] = useFilecoinAsks()
