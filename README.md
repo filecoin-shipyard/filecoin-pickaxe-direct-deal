@@ -9,7 +9,7 @@ into the Filecoin network.
 
 ![Screenshot](screenshot.png)
 
-This front-end program just provides a user-interface. It updates a database,
+This front-end program just provides a user interface. It updates a database,
 which can be replicated to Filecoin nodes which you control - the
 [filecoin-pickaxe-agent](https://github.com/filecoin-shipyard/filecoin-pickaxe-agent)
 running on those nodes will conduct any requested deals.
