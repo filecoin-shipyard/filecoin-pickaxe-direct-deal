@@ -1,6 +1,6 @@
 {
   "name": "filecoin-pickaxe-direct-deal",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Quickly make Filecoin deals for pickaxe bundles",
   "scripts": {
     "dev": "nodemon --ignore dist --exec babel-node index.js",
@@ -16,11 +16,11 @@
   "dependencies": {
     "@jimpick/filecoin-pickaxe-mineshaft": "^0.0.13",
     "@jimpick/filecoin-pickaxe-mineshaft-context": "^0.0.3",
-    "@jimpick/ink-watch-for-exit-key": "^0.0.6",
-    "@jimpick/use-filecoin-asks": "^0.0.4",
-    "@filecoin-shipyard/use-filecoin-config": "^0.0.9",
-    "@filecoin-shipyard/use-filecoin-head": "^0.0.9",
-    "@filecoin-shipyard/use-filecoin-network-info": "^0.0.8",
+    "@jimpick/ink-watch-for-exit-key": "^0.0.7",
+    "@jimpick/use-filecoin-asks": "^0.0.5",
+    "@filecoin-shipyard/use-filecoin-config": "^0.0.11",
+    "@filecoin-shipyard/use-filecoin-head": "^0.0.10",
+    "@filecoin-shipyard/use-filecoin-network-info": "^0.0.11",
     "bignumber.js": "^9.0.0",
     "figures": "^3.0.0",
     "filecoin-api-client": "^0.5.1",
